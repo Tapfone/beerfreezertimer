@@ -1,200 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beer Freezer Timer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Define the background and font */
-        body {
-            background-color: #1e40af; /* Deep Blue background */
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 1rem;
-        }
-
-        /* Enforce 9:16 aspect ratio on the main card for a mobile/device look */
-        .app-container {
-            width: 100%;
-            max-width: 450px; /* Max width for desktop viewing */
-            aspect-ratio: 9 / 16;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Custom scrollbar styling for better aesthetics */
-        .app-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .app-container::-webkit-scrollbar-thumb {
-            background: #9ca3af;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-<body class="bg-blue-900">
-
-    <div id="app" class="app-container bg-gray-50 rounded-3xl p-6 transition-all duration-500">
-        
-        <!-- Header & Icons -->
-        <header class="text-center mb-6">
-            <h1 class="text-3xl font-extrabold text-blue-800 tracking-tight">
-                <i class="fas fa-beer mr-2 text-yellow-500"></i>
-                Beer Freezer Timer
-                <i class="far fa-snowflake ml-2 text-cyan-400"></i>
-            </h1>
-            <p id="status-message" class="text-lg font-medium text-gray-600 mt-1">20 Minutes to Perfection</p>
-        </header>
-
-        <!-- Timer Display -->
-        <div id="timer-display" class="flex justify-center items-center flex-grow-0 py-8 bg-blue-500 text-white rounded-xl shadow-inner mb-6 transition-all duration-300">
-            <span class="text-7xl font-mono font-bold tracking-wider">20:00</span>
+</p>
+            <p>After 20 minutes, your beer should be perfectly cold. **Enjoy!**</p>
         </div>
-
-        <!-- Controls -->
-        <div class="flex justify-around mb-6 flex-shrink-0">
-            <button id="start-button" class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 disabled:bg-gray-400 disabled:opacity-75">
-                <i class="fas fa-play mr-2"></i> Start
-            </button>
-            <button id="reset-button" class="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg transition-all duration-200 transform hover:scale-105 disabled:bg-gray-400 disabled:opacity-75" disabled>
-                <i class="fas fa-redo-alt mr-2"></i> Reset
-            </button>
-        </div>
-
-        <!-- Instructions Section -->
-        <div class="flex-grow min-h-0 overflow-y-auto">
-            <h2 class="text-xl font-bold text-blue-800 mb-3 border-b-2 border-blue-200 pb-1">
-                <i class="fas fa-clipboard-list mr-1"></i> Quick Chill Protocol
-            </h2>
-            <ol class="space-y-3 text-gray-700 list-none pl-0">
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">1: The Mission</strong><br>Open your freezer like you’re entering a top-secret vault. Whisper to yourself: “Operation Ice-Cold Brew begins now.”</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">2: Clear Space</strong><br>Move aside the frozen pizza, month-old mystery Tupperware, and that bag of peas you definitely never use. Your beer deserves VIP freezer real estate.</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">3: Place the Beer</strong><br>Gently lay your beer in the freezer like it’s a newborn baby from a brewery. Do NOT just toss it in—this is beer, not a grenade.</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">4: Set the Timer</strong><br>This is the most important part. Press start on the timer. Because if you don’t, you will 100% forget about it until it becomes a sad, frozen beer-slush explosion.</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">5: Walk Away Confidently</strong><br>Close the freezer door. Pat yourself on the back. Say “I am responsible. I will not forget.” (This is a lie. But try.)</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">6: Fight the URGE</strong><br>Do not open the freezer to “just check.” You’re not inspecting a soufflé. Let the cold do its magic.</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">7: Retrieve on Time</strong><br>When the timer goes off, sprint back like it’s the Olympic finals. Open the freezer and retrieve your perfectly chilled masterpiece. If you forgot the timer… well, enjoy your Beer-Flavored Slushie!</li>
-                <li class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500"><strong class="text-blue-600">8: Celebrate</strong><br>Crack open the beer. Take a sip. Congratulations—you have achieved Peak Refreshment!</li>
-            </ol>
+    </div>
+    
+    <div id="popup" class="popup-container">
+        <div class="popup-content">
+            <h2>Enjoy Your Beer!</h2>
+            <button id="closePopup">Close</button>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
     <script>
-        const INITIAL_TIME_SECONDS = 1200; // 20 minutes * 60 seconds
-        let remainingSeconds = INITIAL_TIME_SECONDS;
-        let timerInterval = null;
+        // JavaScript combined here
+        // --- Timer Variables ---
+        const timerDisplay = document.querySelector('.timer-display');
+        const startButton = document.getElementById('startButton');
+        const resetButton = document.getElementById('resetButton');
+        const popup = document.getElementById('popup');
+        const closePopupButton = document.getElementById('closePopup');
+
+        // 20 minutes in seconds
+        const INITIAL_TIME_SECONDS = 20 * 60;
+        let timeRemaining = INITIAL_TIME_SECONDS;
         let isRunning = false;
+        let timerInterval;
 
-        const timerDisplay = document.getElementById('timer-display');
-        const startButton = document.getElementById('start-button');
-        const resetButton = document.getElementById('reset-button');
-        const statusMessage = document.getElementById('status-message');
-        const appContainer = document.getElementById('app');
+        // --- Utility Functions ---
 
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        }
-
-        function updateDisplay() {
-            timerDisplay.querySelector('span').textContent = formatTime(remainingSeconds);
-            if (remainingSeconds <= 300 && isRunning) { // Last 5 minutes
-                timerDisplay.classList.add('bg-red-500');
-                timerDisplay.classList.remove('bg-blue-500');
-            } else {
-                timerDisplay.classList.remove('bg-red-500');
-                timerDisplay.classList.add('bg-blue-500');
-            }
-        }
-
-        function startTimer() {
-            if (isRunning) return;
-
-            isRunning = true;
-            startButton.disabled = true;
-            resetButton.disabled = false;
-            startButton.innerHTML = '<i class="fas fa-pause mr-2"></i> Pause';
-            startButton.classList.remove('bg-green-600', 'hover:bg-green-700');
-            startButton.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
-            statusMessage.textContent = 'Chilling... Do not forget!';
-            appContainer.classList.remove('bg-red-200');
-            appContainer.classList.add('bg-gray-50');
-
-            timerInterval = setInterval(() => {
-                remainingSeconds--;
-                updateDisplay();
-
-                if (remainingSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    isRunning = false;
-                    alarm();
-                }
-            }, 1000);
-        }
-
-        function resetTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isRunning = false;
-            remainingSeconds = INITIAL_TIME_SECONDS;
+        /**
+         * Formats seconds into "MM:SS" string.
+         * @param {number} totalSeconds - The total number of seconds.
+         * @returns {string} - The formatted time string.
+         */
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
             
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(seconds).padStart(2, '0');
+            
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        /**
+         * Updates the timer display with the current time remaining.
+         */
+        function updateDisplay() {
+            timerDisplay.textContent = formatTime(timeRemaining);
+        }
+
+        /**
+         * Handles the countdown logic for the timer.
+         */
+        function countdown() {
+            timeRemaining--;
             updateDisplay();
 
-            startButton.disabled = false;
-            resetButton.disabled = true;
-            startButton.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
-            startButton.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
-            startButton.classList.add('bg-green-600', 'hover:bg-green-700');
-
-            statusMessage.textContent = '20 Minutes to Perfection';
-            appContainer.classList.remove('bg-red-200');
-            appContainer.classList.add('bg-gray-50');
-            timerDisplay.classList.remove('bg-red-500');
-            timerDisplay.classList.add('bg-blue-500');
-        }
-
-        function alarm() {
-            statusMessage.textContent = 'Enjoy Your Beer!';
-            statusMessage.classList.add('text-4xl', 'font-extrabold', 'text-red-600', 'animate-bounce');
-            timerDisplay.querySelector('span').textContent = 'DONE!';
-            appContainer.classList.remove('bg-gray-50');
-            appContainer.classList.add('bg-red-200');
-
-            // Visual indicator and Vibrate (if supported)
-            if (navigator.vibrate) {
-                navigator.vibrate([1000, 500, 1000, 500, 1000]); // Vibrate sequence for attention
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                startButton.textContent = 'Start';
+                startButton.disabled = false;
+                showPopup();
             }
-            
-            startButton.disabled = true; // Disable start until reset
-            startButton.classList.remove('bg-yellow-600');
-            startButton.classList.add('bg-green-600');
         }
 
-        // Event Listeners
-        startButton.addEventListener('click', () => {
+        // --- Control Functions ---
+
+        /**
+         * Starts or pauses the timer.
+         */
+        function startPauseTimer() {
             if (isRunning) {
-                // If running, the button should ideally be a pause button
-                // For this simple app, we'll just implement start and reset
+                // Pause the timer
+                clearInterval(timerInterval);
+                startButton.textContent = 'Start';
+                isRunning = false;
             } else {
-                startTimer();
+                // Start the timer
+                if (timeRemaining > 0) {
+                    timerInterval = setInterval(countdown, 1000);
+                    startButton.textContent = 'Pause';
+                    isRunning = true;
+                }
             }
-        });
+        }
 
+        /**
+         * Resets the timer to its initial 20-minute state.
+         */
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeRemaining = INITIAL_TIME_SECONDS;
+            updateDisplay();
+            startButton.textContent = 'Start';
+            startButton.disabled = false;
+            popup.style.display = 'none'; // Ensure popup is hidden on reset
+        }
+
+        // --- Pop-up Functions ---
+
+        /**
+         * Displays the "Enjoy Your Beer!" pop-up.
+         */
+        function showPopup() {
+            popup.style.display = 'flex';
+        }
+
+        /**
+         * Hides the pop-up.
+         */
+        function closePopup() {
+            popup.style.display = 'none';
+            resetTimer(); // Optionally reset timer after closing popup
+        }
+
+        // --- Event Listeners and Initialization ---
+
+        startButton.addEventListener('click', startPauseTimer);
         resetButton.addEventListener('click', resetTimer);
+        closePopupButton.addEventListener('click', closePopup);
 
-        // Initial setup
-        window.onload = resetTimer;
+        // Initialize the display when the script loads
+        updateDisplay();
     </script>
 </body>
 </html>
